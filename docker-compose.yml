@@ -1,0 +1,36 @@
+version: "3"
+services:
+  portfolio-service:
+    build: "./portfolio-service"
+    depends_on:
+      - portfolio-service-db
+    environment:
+      - DB_URI=mongodb://portfolio-service-db/doxadb?retryWrites=true&w=majority
+      - PORT=3001
+    volumes:
+      - ./portfolio-service:/opt/app
+    ports:
+      - 8001:3001
+
+  portfolio-service-db:
+    image: mongo
+    ports:
+      - 0.0.0.0:7200:27017
+
+  api-gateway:
+    build: "./api-gateway"
+    depends_on:
+      - portfolio-service-db
+    environment:
+      - X_API_KEY=AIzaSyDWWsZZtgBz6M5lyqtS6S3vv5kZyENfs7s
+      - JWT_SECRET=8fbf223792ce1619a878705ff2ff3da3
+      - MONG0_URI=mongodb://portfolio-service-db/doxadb?retryWrites=true&w=majority
+      - PORT=3000
+      - PORTFOLIO_API_URL=http://portfolio-service:3001/v1
+      - SMS_API_URL=http://notifications-service:/
+      - SOCIAL_AUTH_LAMBDA_URL=https://zbuqo670we.execute-api.sa-east-1.amazonaws.com/default/gateway-api
+      - EMAIL_LAMBDA_URL=https://zbuqo670we.execute-api.sa-east-1.amazonaws.com/default/doxatree-email-service
+    volumes:
+      - ./api-gateway:/opt/app
+    ports:
+      - 8000:3000
