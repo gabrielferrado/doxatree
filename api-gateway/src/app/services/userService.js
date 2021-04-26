@@ -1,11 +1,11 @@
 const axios = require('axios')
 const baseUrl = process.env.PORTFOLIO_API_URL
 
-exports.getPortfolio = async (id) => (await axios.get(`${baseUrl}/${id}`)).data
+exports.getPortfolio = async (id) => (await axios.get(`${baseUrl}/portfolios/${id}`)).data
 exports.createPortfolio = async (id, params) =>
-  (await axios.post(`${baseUrl}/${id}`, params)).data
+  (await axios.post(`${baseUrl}/portfolios/${id}`, params)).data
 exports.updatePortfolio = async (id, params) =>
-  (await axios.put(`${baseUrl}/${id}`, params)).data
+  (await axios.put(`${baseUrl}/portfolios/${id}`, params)).data
 exports.createLocket = async (portfolioId, params) =>
   (await axios.post(`${baseUrl}/locket/${portfolioId}`, params)).data
 

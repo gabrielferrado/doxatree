@@ -1,5 +1,5 @@
-import mongoose from '../../database';
-import { formatFloatResult } from '../../utils';
+import mongoose from "../../database";
+import { formatFloatResult } from "../../utils";
 
 const LocketSchema = new mongoose.Schema({
   name: {
@@ -15,18 +15,18 @@ const LocketSchema = new mongoose.Schema({
   },
   group: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Group',
+    ref: "Group",
     default: null,
   },
   assignedTo: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Portfolio',
+    ref: "Portfolio",
     required: true,
   },
   assets: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Asset',
+      ref: "Asset",
     },
   ],
   createdAt: {
@@ -39,30 +39,29 @@ const LocketSchema = new mongoose.Schema({
   },
 });
 
-LocketSchema.virtual('amount').get(function () {
+LocketSchema.virtual("amount").get(function () {
   const amount = this.assets.reduce(
-    (sum, current) =>
-      sum + current.qty * current.stockPrice,
-    0,
+    (sum, current) => sum + current.qty * current.stockPrice,
+    0
   );
   return formatFloatResult(amount);
 });
 
-LocketSchema.virtual('amountPercentage').get(function () {
+LocketSchema.virtual("amountPercentage").get(function () {
   const parent = this.parent();
 
   return formatFloatResult(this.amount / parent.netWorth);
 });
 
-LocketSchema.virtual('meta').get(function () {
+LocketSchema.virtual("meta").get(function () {
   const parent = this.parent();
 
   return formatFloatResult(parent.netWorth * this.metaPercentage);
 });
 
-LocketSchema.pre('save', async function () {
+LocketSchema.pre("save", async function () {
   this.updatedAt = Date.now();
 });
 
-const Locket = mongoose.model('Locket', LocketSchema);
+const Locket = mongoose.model("Locket", LocketSchema);
 export default Locket;

@@ -6,11 +6,11 @@
   "scripts": {
     "build": "webpack --progress",
     "deploy": "node-deploy $(pwd)",
+    "dev": "babel-watch -L src/index.js",
     "watch": "babel-watch -L src/index.js",
     "linkall": "yarn link node-deploy"
   },
   "devDependencies": {
-    "node-deploy": "../node-deploy",
     "babel-watch": "^7.4.1",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.22.0",
